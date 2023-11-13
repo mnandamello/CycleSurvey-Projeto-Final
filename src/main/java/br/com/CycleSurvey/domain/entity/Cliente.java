@@ -33,7 +33,4 @@ public class Cliente {
 
     private String complemento;
 
-    private Bicicleta bicicleta;
-
-
 }

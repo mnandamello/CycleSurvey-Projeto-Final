@@ -21,5 +21,7 @@ public class Bicicleta {
 
     private String nf;
 
+    private Cliente cliente;
+
 
 }

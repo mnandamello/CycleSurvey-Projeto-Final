@@ -1,13 +1,11 @@
 package br.com.CycleSurvey.domain.repository;
 
-import br.com.CycleSurvey.domain.entity.Acessorio;
 import br.com.CycleSurvey.domain.entity.Bicicleta;
-import br.com.CycleSurvey.domain.service.AcessorioService;
+import br.com.CycleSurvey.domain.entity.Cliente;
+import br.com.CycleSurvey.domain.service.ClienteService;
 import br.com.CycleSurvey.infra.ConnectionFactory;
 
 import java.sql.*;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -33,20 +31,28 @@ public class BicicletaRepository implements Repository<Bicicleta,Long> {
         ResultSet rs = null;
         Statement st = null;
         try {
-            String sql = "SELECT * FROM T_CYCLESURVEY_INFO_BIKE";
+            String sql = "SELECT * FROM t_cycleSurvey_info_bike";
             st = con.createStatement();
             rs = st.executeQuery(sql);
 
+            ClienteService clienteService = new ClienteService();
+
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
-                    Long id = rs.getLong("BICICLETA_ID");
-                    String marca = rs.getString("MARCA");
-                    String modelo = rs.getString("MODELO");
-                    int anoCompra = rs.getInt("ANO_COMPRA");
-                    double valor = rs.getDouble("VALOR");
-                    String nf = rs.getString("NOTA_FISCAL");
+                    Long id = rs.getLong("id_bike");
+                    String marca = rs.getString("marca");
+                    String modelo = rs.getString("modelo");
+                    int anoCompra = rs.getInt("ano_compra");
+                    double valor = rs.getDouble("valor");
+                    String nf = rs.getString("nota_fiscal");
 
-                    list.add(new Bicicleta(id,marca,modelo,anoCompra,valor,nf));
+                    long id_cliente = rs.getLong("id_pf");
+                    Cliente cliente = null;
+
+
+                    cliente = clienteService.findById(id_cliente);
+
+                    list.add(new Bicicleta(id,marca,modelo,anoCompra,valor,nf, cliente));
 
 
                     /**
@@ -78,10 +84,13 @@ public class BicicletaRepository implements Repository<Bicicleta,Long> {
     @Override
     public Bicicleta findById(Long id) {
         Bicicleta bicicleta = null;
-        var sql = "SELECT * FROM T_CYCLESURVEY_INFO_BIKE where BICICLETA_ID = ?";
+        var sql = "SELECT * FROM t_cycleSurvey_info_bike where BICICLETA_ID = ?";
         Connection con = factory.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
+
+        ClienteService clienteService = new ClienteService();
+
         try {
             ps = con.prepareStatement(sql);
             ps.setLong(1, id);
@@ -89,12 +98,19 @@ public class BicicletaRepository implements Repository<Bicicleta,Long> {
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
 
-                    String marca = rs.getString("MARCA");
-                    String modelo = rs.getString("MODELO");
-                    int anoCompra = rs.getInt("ANO_COMPRA");
-                    double valor = rs.getDouble("VALOR");
-                    String nf = rs.getString("NOTA_FISCAL");
-                    bicicleta = new Bicicleta(id,marca,modelo,anoCompra,valor,nf);
+                    String marca = rs.getString("marca");
+                    String modelo = rs.getString("modelo");
+                    int anoCompra = rs.getInt("ano_compra");
+                    double valor = rs.getDouble("valor");
+                    String nf = rs.getString("nota_fiscal");
+
+                    long id_cliente = rs.getLong("id_pf");
+                    Cliente cliente = null;
+
+
+                    cliente = clienteService.findById(id_cliente);
+
+                    bicicleta = new Bicicleta(id,marca,modelo,anoCompra,valor,nf, cliente);
                 }
             } else {
                 System.out.println("Dados não encontrados com o id: " + id);
@@ -110,7 +126,7 @@ public class BicicletaRepository implements Repository<Bicicleta,Long> {
     @Override
     public Bicicleta persiste(Bicicleta bc) {
 
-        var sql = "INSERT INTO T_CYCLESURVEY_INFO_BIKE ( MARCA , MODELO, ANO_COMPRA, VALOR,NOTA_FISCAL) VALUES (0, ?,?,?,?,?)";
+        var sql = "INSERT INTO t_cycleSurvey_info_bike ( id_bike, marca , modelo, ano_compra, valor, nota_fiscal) VALUES (0, ?,?,?,?,?, ?, ? )";
 
         Connection con = factory.getConnection();
         PreparedStatement ps = null;
@@ -120,12 +136,13 @@ public class BicicletaRepository implements Repository<Bicicleta,Long> {
             ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             // seta os valores dos parâmetros
-            ps.setString(1, bc.getMarca());
-            ps.setString(2, bc.getModelo());
-            ps.setInt(3, bc.getAnoDeCompra());
-            ps.setDouble(4, bc.getValor());
-            ps.setString(5, bc.getNf());
-
+            ps.setLong(1, bc.getId());
+            ps.setString(2, bc.getMarca());
+            ps.setString(3, bc.getModelo());
+            ps.setInt(4, bc.getAnoDeCompra());
+            ps.setDouble(5, bc.getValor());
+            ps.setString(6, bc.getNf());
+            ps.setLong(7, bc.getCliente().getId());
 
 
             ps.executeUpdate();

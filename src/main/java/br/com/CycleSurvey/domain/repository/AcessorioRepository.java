@@ -3,9 +3,11 @@ package br.com.CycleSurvey.domain.repository;
 
 import br.com.CycleSurvey.domain.entity.Acessorio;
 import br.com.CycleSurvey.domain.entity.Bicicleta;
-import br.com.CycleSurvey.domain.service.AcessorioService;
 import br.com.CycleSurvey.domain.service.BicicletaService;
 import br.com.CycleSurvey.infra.ConnectionFactory;
+import java.sql.Connection;
+import java.util.List;
+
 
 import java.sql.*;
 import java.util.*;
@@ -35,21 +37,21 @@ public class AcessorioRepository implements Repository<Acessorio, Long> {
         ResultSet rs = null;
         Statement st = null;
         try {
-            String sql = "SELECT * FROM T_CYCLESURVEY_ACESSORIO";
+            String sql = "SELECT * FROM t_cycleSurvey_acessorio";
             st = con.createStatement();
             rs = st.executeQuery(sql);
             BicicletaService bicicletaService = new BicicletaService();
 
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
-                    Long id = rs.getLong("ACESSORIO_ID");
-                    String marca = rs.getString("MARCA_ACESSORIO");
-                    String modelo = rs.getString("MODELO");
-                    String tipo = rs.getString("TIPO_ACESSORIO");
-                    double valor = rs.getDouble("VALOR");
-                    String nf = rs.getString("NOTA_FISCAL");
+                    Long id = rs.getLong("id_acessorio");
+                    String marca = rs.getString("marca_acessorio");
+                    String modelo = rs.getString("modelo");
+                    String tipo = rs.getString("tipo_acessorio");
+                    double valor = rs.getDouble("valor");
+                    String nf = rs.getString("nota_fiscal_acessorio");
 
-                    long idBk = rs.getLong("BICICLETA_ID");
+                    long idBk = rs.getLong("id_bike");
                     Bicicleta bicicleta = null;
 
 
@@ -72,7 +74,7 @@ public class AcessorioRepository implements Repository<Acessorio, Long> {
     @Override
     public Acessorio findById(Long id) {
         Acessorio acessorio = null;
-        var sql = "SELECT * FROM T_CYCLESURVEY_ACESSORIO where ACESSORIO_ID = ?";
+        var sql = "SELECT * FROM t_cycleSurvey_acessorio where ACESSORIO_ID = ?";
         Connection con = factory.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -85,12 +87,12 @@ public class AcessorioRepository implements Repository<Acessorio, Long> {
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
 
-                    String marca = rs.getString("MARCA_ACESSORIO");
-                    String modelo = rs.getString("MODELO");
-                    String tipo = rs.getString("TIPO_ACESSORIO");
-                    double valor = rs.getDouble("VALOR");
-                    String nf = rs.getString("NOTA_FISCAL");
-                    long idBk = rs.getLong("BICICLETA_ID");
+                    String marca = rs.getString("marca_acessorio");
+                    String modelo = rs.getString("modelo");
+                    String tipo = rs.getString("tipo_acessorio");
+                    double valor = rs.getDouble("valor");
+                    String nf = rs.getString("nota_fiscal_acessorio");
+                    long idBk = rs.getLong("id_bike");
                     Bicicleta bicicleta = null;
 
                     bicicleta = bicicletaService.findById(idBk);
@@ -112,7 +114,7 @@ public class AcessorioRepository implements Repository<Acessorio, Long> {
     @Override
     public Acessorio persiste(Acessorio ac) {
 
-        var sql = "INSERT INTO T_CYCLESURVEY_ACESSORIO (MARCA_ACESSORIO , MODELO, TIPO_ACESSORIO, VALOR,NOTA_FISCAL)" +
+        var sql = "INSERT INTO t_cycleSurvey_acessorio (marca_acessorio , modelo, tipo_acessorio, valor,nota_fiscal_acessorio, id_bike)" +
                 " VALUES (0, ?,?,?,?,?,?)";
 
 

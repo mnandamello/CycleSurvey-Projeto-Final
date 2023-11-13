@@ -11,7 +11,7 @@ public class AcessorioService implements Service <Acessorio, Long>{
 
     @Override
     public List<Acessorio> findAll() {
-        return repo.findAll();
+        return (List<Acessorio>) repo.findAll();
     }
 
     @Override
