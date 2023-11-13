@@ -5,20 +5,19 @@ import br.com.CycleSurvey.domain.repository.AcessorioRepository;
 
 import java.util.List;
 
-public class AcessorioService implements Service <Acessorio, Long>{
+public class AcessorioService implements Service<Acessorio, Long> {
 
     private AcessorioRepository repo = AcessorioRepository.build();
 
     @Override
     public List<Acessorio> findAll() {
-        return (List<Acessorio>) repo.findAll();
+        return repo.findAll();
     }
 
     @Override
-    public  Acessorio findById(Long id) {
+    public Acessorio findById(Long id) {
         return repo.findById( id );
     }
-
 
     @Override
     public Acessorio persiste(Acessorio ac) {

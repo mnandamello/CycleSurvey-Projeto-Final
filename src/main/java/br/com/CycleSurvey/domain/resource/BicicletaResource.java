@@ -11,13 +11,10 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
-@Path("bicicleta/")
+@Path("/bicicleta")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-
-
-
-public class BicicletaResource implements Resource<Bicicleta, Long>{
+public class BicicletaResource implements Resource<Bicicleta, Long> {
 
     @Context
     UriInfo uriInfo;
@@ -59,10 +56,6 @@ public class BicicletaResource implements Resource<Bicicleta, Long>{
         return Response.created( uri ).entity( bicicleta ).build();
 
     }
-
-
-
-
 
 
 }
