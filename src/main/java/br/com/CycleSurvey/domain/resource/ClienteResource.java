@@ -10,11 +10,9 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
-@Path("cliente/")
+@Path("/cliente")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-
-
 public class ClienteResource implements Resource<Cliente, Long> {
     @Context
     UriInfo uriInfo;

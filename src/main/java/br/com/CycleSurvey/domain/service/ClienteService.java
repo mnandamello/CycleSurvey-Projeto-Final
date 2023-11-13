@@ -5,7 +5,7 @@ import br.com.CycleSurvey.domain.repository.ClienteRepository;
 
 import java.util.List;
 
-public class ClienteService implements Service <Cliente, Long> {
+public class ClienteService implements Service<Cliente, Long> {
 
     private ClienteRepository repo = ClienteRepository.build();
 
@@ -18,7 +18,6 @@ public class ClienteService implements Service <Cliente, Long> {
     public Cliente findById(Long id) {
         return repo.findById( id );
     }
-
 
     @Override
     public Cliente persiste(Cliente cliente) {

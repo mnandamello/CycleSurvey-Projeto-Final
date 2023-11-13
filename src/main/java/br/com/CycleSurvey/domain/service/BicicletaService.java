@@ -19,7 +19,6 @@ public class BicicletaService implements Service<Bicicleta, Long>{
         return repo.findById( id );
     }
 
-
     @Override
     public Bicicleta persiste(Bicicleta bc) {
         return repo.persiste( bc );

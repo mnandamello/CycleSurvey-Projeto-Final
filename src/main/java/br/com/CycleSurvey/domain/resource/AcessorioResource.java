@@ -9,12 +9,10 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
-@Path("acessorio/")
+@Path("/acessorio")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-
-
-public class AcessorioResource implements Resource<Acessorio, Long>{
+public class AcessorioResource implements Resource<Acessorio, Long> {
 
     @Context
     UriInfo uriInfo;
@@ -44,6 +42,7 @@ public class AcessorioResource implements Resource<Acessorio, Long>{
     @POST
     @Override
     public Response persiste(Acessorio ac) {
+
         ac.setId( null );
         Acessorio acessorio = service.persiste( ac );
 
@@ -56,7 +55,6 @@ public class AcessorioResource implements Resource<Acessorio, Long>{
         return Response.created( uri ).entity( acessorio ).build();
 
     }
-
 
 
 }
